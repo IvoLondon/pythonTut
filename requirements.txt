@@ -1,2 +1,5 @@
 django
+django[argon2]
+bcrypt
 ipdb
+pillow

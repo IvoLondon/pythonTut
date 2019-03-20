@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+    {% extends 'basicform/base.html' %}
+    {% block body_block %}
+        {% if registered %}
+            <h6>Thank you for registering!</h6>
+        {% else %}
+            <form method="POST" enctype="multipart/form-data">
+                {{users_form.as_p}}
+                {{user_profile.as_p}}
+                {% csrf_token %}
+                <input type="submit" value="Submit">
+            </form>
+        {% endif %}
+    {% endblock %}

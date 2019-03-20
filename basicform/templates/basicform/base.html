@@ -27,14 +27,20 @@
               <a class="nav-link" href="{% url 'basicform:register' %}">Reg</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="{% url 'basicform:adminreg' %}">Admin Reg</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="{% url 'admin:login' %}">Admin</a>
             </li>
+            
           </ul>
         </div>
     </nav>
-    
-    {% block body_block %}
+    <div class="container">
+      {% block body_block %}
 
-    {% endblock %}
+      {% endblock %}
+    </div>
+    
 </body>
 </html>
