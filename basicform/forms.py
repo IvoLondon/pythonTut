@@ -1,5 +1,6 @@
 from django import forms
 from django.core import validators
+from basicform.models import People
 
 
 def check_for_z(value):
@@ -7,7 +8,7 @@ def check_for_z(value):
         raise forms.ValidationError("Needs to start with Z")
 
 
-class FormName(forms.Form):
+class FormName(forms.ModelForm):
     name = forms.CharField(validators=[check_for_z])
     email = forms.EmailField()
     verify_email = forms.EmailField(label='Enter your email again:')
@@ -23,3 +24,7 @@ class FormName(forms.Form):
 
         if email != vmail:
             raise forms.ValidationError('Make sure the email match')
+
+    class Meta:
+        model = People
+        fields = '__all__'
