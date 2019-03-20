@@ -9,6 +9,10 @@ def index(request):
 
 def form_name_view(request):
     form = FormName()
+    details = {
+        'title': 'form page',
+        'number': 1000,
+    }
 
     if request.method == 'POST':
         form = FormName(request.POST)
@@ -20,5 +24,5 @@ def form_name_view(request):
             print('EMAIL: ' + form.cleaned_data['email'])
             print('TEXT: ' + form.cleaned_data['text'])
             return index(request)
-    return render(request, 'basicform/form_page.html', {'form': form})
+    return render(request, 'basicform/form_page.html', {'form': form, 'details' : details})
    
