@@ -2,14 +2,26 @@ from django.shortcuts import render
 from basicform.forms import FormName
 from basicform.admin_forms import UserForm, UserProfileInfoForm
 
- from django.contrib.auth import authenticate, login, logout
- from django.http import HttpResponseRedirect, HttpResponse
- from django.core.urlresolvers import reverse
- from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect, HttpResponse
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+
+# Create your views here. 
 def index(request):
     return render(request, 'basicform/index.html')
+
+
+@login_required
+def special(request):
+    return HttpResponse('You are logged in, nice!')
+
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('index'))
 
 
 def form_name_view(request):
@@ -43,13 +55,13 @@ def form_admin_view(request):
 
         if users_form.is_valid() and user_profile.is_valid():
 
-            user = users_form.save()
+            user = users_form.save(commit=False)
             user.set_password(user.password)
             user.save()
 
             profile = user_profile.save(commit=False)
             profile.user = user
-
+            import pdb; pdb.set_trace()
             if 'profile_pic' in request.FILES:
                 profile.profile_pic = request.FILES['profile_pic']
 
@@ -67,3 +79,22 @@ def form_admin_view(request):
                                                 'user_profile': user_profile,
                                                 'registered': registered
                                                 })
+
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(username=username, password=password)
+
+        if user:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect(reverse('index'))
+            else:
+                return HttpResponse('ACOUNT NOT ACTIVE')
+        else:
+            return HttpResponse('Invalid login details supplied!')
+    else:
+        return render(request, 'basicform/login.html', {})
